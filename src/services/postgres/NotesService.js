@@ -28,6 +28,11 @@ class NotesService {
     return result.rows[0].id;
   }
 
+  async getNotes() {
+    const result = await this._pool.query("SELECT * FROM notes");
+    return result.rows.map(mapDBToModel);
+  }
+
   async getNoteById(id) {
     const query = {
       text: "SELECT * FROM notes WHERE id = $1",
@@ -58,17 +63,16 @@ class NotesService {
 
   async deleteNoteById(id) {
     const query = {
-      text: 'DELETE FROM notes WHERE id = $1 RETURNING id',
+      text: "DELETE FROM notes WHERE id = $1 RETURNING id",
       values: [id],
     };
- 
+
     const result = await this._pool.query(query);
- 
+
     if (!result.rows.length) {
-      throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
+      throw new NotFoundError("Catatan gagal dihapus. Id tidak ditemukan");
     }
   }
 }
-
 
 module.exports = NotesService;
