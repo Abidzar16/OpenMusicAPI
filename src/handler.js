@@ -1,27 +1,27 @@
 const { nanoid } = require('nanoid');
-const notes = require('./notes');
+const songs = require('./songs');
 
-const addNoteHandler = (request, h) => {
-  const { title = 'untitled', tags, body } = request.payload;
+const addSongHandler = (request, h) => {
+  const { title = 'untitled', year, performer, genre, duration } = request.payload;
 
   const id = nanoid(16);
   const createdAt = new Date().toISOString();
   const updatedAt = createdAt;
 
-  const newNote = {
-    title, tags, body, id, createdAt, updatedAt,
+  const newSong = {
+    title, year, performer, genre, duration, id, createdAt, updatedAt,
   };
 
-  notes.push(newNote);
+  songs.push(newSong);
 
-  const isSuccess = notes.filter((note) => note.id === id).length > 0;
+  const isSuccess = songs.filter((song) => song.id === id).length > 0;
 
   if (isSuccess) {
     const response = h.response({
       status: 'success',
-      message: 'Catatan berhasil ditambahkan',
+      message: 'Lagu berhasil ditambahkan',
       data: {
-        noteId: id,
+        songId: id,
       },
     });
     response.code(201);
@@ -30,61 +30,65 @@ const addNoteHandler = (request, h) => {
 
   const response = h.response({
     status: 'fail',
-    message: 'Catatan gagal ditambahkan',
+    message: 'Lagu gagal ditambahkan',
   });
   response.code(500);
   return response;
 };
 
-const getAllNotesHandler = () => ({
+const getAllSongsHandler = () => ({
   status: 'success',
   data: {
-    notes,
+    id: songs.id,
+    title: songs.title,
+    performer: songs.performer
   },
 });
 
-const getNoteByIdHandler = (request, h) => {
+const getSongByIdHandler = (request, h) => {
   const { id } = request.params;
 
-  const note = notes.filter((n) => n.id === id)[0];
+  const song = songs.filter((n) => n.id === id)[0];
 
-  if (note !== undefined) {
+  if (song !== undefined) {
     return {
       status: 'success',
       data: {
-        note,
+        song,
       },
     };
   }
 
   const response = h.response({
     status: 'fail',
-    message: 'Catatan tidak ditemukan',
+    message: 'Lagu tidak ditemukan',
   });
   response.code(404);
   return response;
 };
 
-const editNoteByIdHandler = (request, h) => {
+const editSongByIdHandler = (request, h) => {
   const { id } = request.params;
 
-  const { title, tags, body } = request.payload;
+  const { title, year, performer, genre, duration } = request.payload;
   const updatedAt = new Date().toISOString();
 
-  const index = notes.findIndex((note) => note.id === id);
+  const index = songs.findIndex((song) => song.id === id);
 
   if (index !== -1) {
-    notes[index] = {
-      ...notes[index],
+    songs[index] = {
+      ...songs[index],
       title,
-      tags,
-      body,
+      year,
+      performer,
+      genre,
+      duration,
       updatedAt,
     };
 
     const response = h.response({
       status: 'success',
-      message: 'Catatan berhasil diperbarui',
+      message: 'Lagu berhasil diperbarui',
     });
     response.code(200);
     return response;
@@ -92,22 +96,22 @@ const editNoteByIdHandler = (request, h) => {
 
   const response = h.response({
     status: 'fail',
-    message: 'Gagal memperbarui catatan. Id tidak ditemukan',
+    message: 'Gagal memperbarui Lagu. Id tidak ditemukan',
   });
   response.code(404);
   return response;
 };
 
-const deleteNoteByIdHandler = (request, h) => {
+const deleteSongByIdHandler = (request, h) => {
   const { id } = request.params;
 
-  const index = notes.findIndex((note) => note.id === id);
+  const index = songs.findIndex((song) => song.id === id);
 
   if (index !== -1) {
-    notes.splice(index, 1);
+    songs.splice(index, 1);
     const response = h.response({
       status: 'success',
-      message: 'Catatan berhasil dihapus',
+      message: 'Lagu berhasil dihapus',
     });
     response.code(200);
     return response;
@@ -115,16 +119,16 @@ const deleteNoteByIdHandler = (request, h) => {
 
   const response = h.response({
     status: 'fail',
-    message: 'Catatan gagal dihapus. Id tidak ditemukan',
+    message: 'Lagu gagal dihapus. Id tidak ditemukan',
   });
   response.code(404);
   return response;
 };
 
 module.exports = {
-  addNoteHandler,
-  getAllNotesHandler,
-  getNoteByIdHandler,
-  editNoteByIdHandler,
-  deleteNoteByIdHandler,
+  addSongHandler,
+  getAllSongsHandler,
+  getSongByIdHandler,
+  editSongByIdHandler,
+  deleteSongByIdHandler,
 };

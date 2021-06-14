@@ -1,33 +1,33 @@
-const { deleteNoteByIdHandler } = require('./handler');
-const { editNoteByIdHandler } = require('./handler');
-const { getNoteByIdHandler } = require('./handler');
-const { addNoteHandler, getAllNotesHandler } = require('./handler');
+const { deleteSongByIdHandler } = require('./handler');
+const { editSongByIdHandler } = require('./handler');
+const { getSongByIdHandler } = require('./handler');
+const { addSongHandler, getAllSongsHandler } = require('./handler');
 
 const routes = [
   {
     method: 'POST',
-    path: '/notes',
-    handler: addNoteHandler,
+    path: '/songs',
+    handler: addSongHandler,
   },
   {
     method: 'GET',
-    path: '/notes',
-    handler: getAllNotesHandler,
+    path: '/songs',
+    handler: getAllSongsHandler,
   },
   {
     method: 'GET',
-    path: '/notes/{id}',
-    handler: getNoteByIdHandler,
+    path: '/songs/{id}',
+    handler: getSongByIdHandler,
   },
   {
     method: 'PUT',
-    path: '/notes/{id}',
-    handler: editNoteByIdHandler,
+    path: '/songs/{id}',
+    handler: editSongByIdHandler,
   },
   {
     method: 'DELETE',
-    path: '/notes/{id}',
-    handler: deleteNoteByIdHandler,
+    path: '/songs/{id}',
+    handler: deleteSongByIdHandler,
   },
 ];
 

@@ -1,11 +1,9 @@
 /* eslint-disable camelcase */
 
-/* eslint-disable camelcase */
- 
 exports.shorthands = undefined;
  
 exports.up = (pgm) => {
-  pgm.createTable('notes', {
+  pgm.createTable('songs', {
     id: {
       type: 'VARCHAR(50)',
       primaryKey: true,
@@ -14,25 +12,33 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
-    body: {
+    year: {
+      type: 'INT',
+      notNull: true,
+    },
+    performer: {
       type: 'TEXT',
       notNull: true,
     },
-    tags: {
-      type: 'TEXT[]',
-      notNull: true,
+    genre: {
+        type: 'INT',
+        notNull: true,
+    },
+    duration: {
+        type: 'INT',
+        notNull: true,
     },
     created_at: {
-      type: 'TEXT',
+      type: 'TIMESTAMP',
       notNull: true,
     },
     updated_at: {
-      type: 'TEXT',
+      type: 'TIMESTAMP',
       notNull: true,
     },
   });
 };
  
 exports.down = (pgm) => {
-  pgm.dropTable('notes');
+  pgm.dropTable('songs');
 };
