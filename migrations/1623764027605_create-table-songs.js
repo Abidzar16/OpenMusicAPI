@@ -21,14 +21,14 @@ exports.up = (pgm) => {
       notNull: true,
     },
     genre: {
-        type: 'INT',
+        type: 'TEXT',
         notNull: true,
     },
     duration: {
         type: 'INT',
         notNull: true,
     },
-    created_at: {
+    inserted_at: {
       type: 'TIMESTAMP',
       notNull: true,
     },
@@ -42,3 +42,4 @@ exports.up = (pgm) => {
 exports.down = (pgm) => {
   pgm.dropTable('songs');
 };
+
