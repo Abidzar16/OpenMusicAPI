@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 const ClientError = require('../../exceptions/ClientError');
 
 class AuthenticationsHandler {
