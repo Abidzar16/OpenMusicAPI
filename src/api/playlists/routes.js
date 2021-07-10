@@ -17,14 +17,6 @@ const routes = (handler) => [
     },
   },
   {
-    method: "PUT",
-    path: "/playlists/{id}",
-    handler: handler.putPlaylistByIdHandler,
-    options: {
-      auth: 'notesapp_jwt',
-    },
-  },
-  {
     method: "DELETE",
     path: "/playlists/{id}",
     handler: handler.deletePlaylistByIdHandler,
@@ -32,22 +24,30 @@ const routes = (handler) => [
       auth: 'notesapp_jwt',
     },
   },
-  // {
-  //   method: "POST",
-  //   path: "/playlists/{playlistId}/songs",
-  //   handler: handler.postSongtoPlaylistHandler,
-  //   options: {
-  //     auth: 'notesapp_jwt',
-  //   },
-  // },
-  // {
-  //   method: "GET",
-  //   path: "/playlists/{playlistId}/songs",
-  //   handler: handler.getSongsonPlaylistsHandler,
-  //   options: {
-  //     auth: 'notesapp_jwt',
-  //   },
-  // },
+  {
+    method: "POST",
+    path: "/playlists/{playlistId}/songs",
+    handler: handler.postSongtoPlaylistHandler,
+    options: {
+      auth: 'notesapp_jwt',
+    },
+  },
+  {
+    method: "GET",
+    path: "/playlists/{playlistId}/songs",
+    handler: handler.getSongsFromPlaylistHandler,
+    options: {
+      auth: 'notesapp_jwt',
+    },
+  },
+  {
+    method: "DELETE",
+    path: "/playlists/{playlistId}/songs",
+    handler: handler.deleteSongsOnPlaylistByIdHandler,
+    options: {
+      auth: 'notesapp_jwt',
+    },
+  },
 ];
 
 module.exports = routes;

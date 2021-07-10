@@ -16,9 +16,8 @@ class SongsHandler {
     try {
       this._validator.validateSongPayload(request.payload);
       const { title, year, performer, genre, duration } = request.payload;
-      const { id: credentialId } = request.auth.credentials;
 
-      const songId = await this._service.addSong({ title, year, performer, genre, duration, owner: credentialId });
+      const songId = await this._service.addSong({ title, year, performer, genre, duration });
  
       const response = h.response({
         status: 'success',
@@ -50,24 +49,40 @@ class SongsHandler {
     }
   }
  
-  async getSongsHandler(request) {
-    const { id: credentialId } = request.auth.credentials;
-    const songs = await this._service.getSongs(credentialId);
-    const song = songs.map((item) => ({ id: item.id, title: item.title, performer: item.performer }));
-    return {
-      status: 'success',
-      data: {
-        songs: song
+  async getSongsHandler(request, h) {
+    try {
+      const songs = await this._service.getSongs();
+      const song = songs.map((item) => ({ id: item.id, title: item.title, performer: item.performer }));
+      return {
+        status: 'success',
+        data: {
+          songs: song
+        }
+      };
+    } catch (error) {
+      if (error instanceof ClientError) {
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+        response.code(error.statusCode);
+        return response;
       }
-    };
+ 
+      // Server ERROR!
+      const response = h.response({
+        status: 'error',
+        message: 'Maaf, terjadi kegagalan pada server kami.',
+      });
+      response.code(500);
+      console.error(error);
+      return response;
+    }
   }
  
   async getSongByIdHandler(request, h) {
     try {
       const { id } = request.params;
-      const { id: credentialId } = request.auth.credentials;
-
-      await this._service.verifySongOwner(id, credentialId);
       const song = await this._service.getSongById(id);
       return {
         status: 'success',
@@ -101,9 +116,6 @@ class SongsHandler {
       this._validator.validateSongPayload(request.payload);
       const { title, year, performer, genre, duration } = request.payload;
       const { id } = request.params;
-      const { id: credentialId } = request.auth.credentials;
-
-      await this._service.verifySongOwner(id, credentialId);
       await this._service.editSongById(id, { title, year, performer, genre, duration });
  
       return {
@@ -134,9 +146,6 @@ class SongsHandler {
   async deleteSongByIdHandler(request, h) {
     try {
       const { id } = request.params;
-      const { id: credentialId } = request.auth.credentials;
-      
-      await this._service.verifySongOwner(id, credentialId);
       await this._service.deleteSongById(id);
       return {
         status: 'success',
